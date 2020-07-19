@@ -28,11 +28,13 @@ class SingleMovie : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_single_movie)
 
-        val movieId: Int = intent.getIntExtra("id",2)
+        val movieId: Int = intent.getIntExtra("id",1)
+
+        val actionbar = supportActionBar
+        actionbar!!.setDisplayHomeAsUpEnabled(true)
 
         val apiService : TheMovieDBInterface = TheMovieDBClient.getClient()
-        movieRepository =
-            MovieDetailsRepository(apiService)
+        movieRepository = MovieDetailsRepository(apiService)
 
         viewModel = getViewModel(movieId)
 
@@ -73,11 +75,13 @@ class SingleMovie : AppCompatActivity() {
         return ViewModelProviders.of(this, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T {
                 @Suppress("UNCHECKED_CAST")
-                return SingleMovieViewModel(
-                    movieRepository,
-                    movieId
-                ) as T
+                return SingleMovieViewModel(movieRepository,movieId) as T
             }
         })[SingleMovieViewModel::class.java]
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

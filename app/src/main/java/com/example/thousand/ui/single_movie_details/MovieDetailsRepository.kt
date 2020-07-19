@@ -13,11 +13,7 @@ class MovieDetailsRepository (private val apiService : TheMovieDBInterface) {
 
     fun fetchSingleMovieDetails (compositeDisposable: CompositeDisposable, movieId: Int) : LiveData<MovieDetails> {
 
-        movieDetailsNetworkDataSource =
-            MovieDetailsNetworkDataSource(
-                apiService,
-                compositeDisposable
-            )
+        movieDetailsNetworkDataSource = MovieDetailsNetworkDataSource(apiService,compositeDisposable)
         movieDetailsNetworkDataSource.fetchMovieDetails(movieId)
 
         return movieDetailsNetworkDataSource.downloadedMovieResponse
