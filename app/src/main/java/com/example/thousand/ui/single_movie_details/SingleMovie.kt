@@ -30,18 +30,18 @@ class SingleMovie : AppCompatActivity() {
 
         val movieId: Int = intent.getIntExtra("id",1)
 
-        val actionbar = supportActionBar
-        actionbar!!.setDisplayHomeAsUpEnabled(true)
-
         val apiService : TheMovieDBInterface = TheMovieDBClient.getClient()
         movieRepository = MovieDetailsRepository(apiService)
 
         viewModel = getViewModel(movieId)
 
+        val actionbar = supportActionBar
+        actionbar!!.setDisplayHomeAsUpEnabled(true)
+
         viewModel.movieDetails.observe(this, Observer {
+            actionbar.setTitle(it.title)
             bindUI(it)
         })
-
         viewModel.networkState.observe(this, Observer {
             progress_bar.visibility = if (it == NetworkState.LOADING) View.VISIBLE else View.GONE
             txt_error.visibility = if (it == NetworkState.ERROR) View.VISIBLE else View.GONE
@@ -51,6 +51,8 @@ class SingleMovie : AppCompatActivity() {
     }
 
     fun bindUI( it: MovieDetails){
+
+
         movie_title.text = it.title
         movie_tagline.text = it.tagline
         movie_release_date.text = it.releaseDate
